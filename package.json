@@ -7,19 +7,18 @@
     "start": "electron ./dist/app.js",
     "build": "electron-builder build --win --publish never",
     "deploy": "electron-builder build --win --publish always",
-    "compile": "tsc && xcopy src dist /E /H /C /I /Y /EXCLUDE:exclude.conf",
     "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Astro-Client/Launcher.git"
+    "url": "git+https://github.com/Astro-Client/Launcher-Public.git"
   },
   "author": "Next Origin, INC.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Astro-Client/Launcher/issues"
+    "url": "https://github.com/Astro-Client/Launcher-Public/issues"
   },
-  "homepage": "https://github.com/Astro-Client/Launcher#readme",
+  "homepage": "https://github.com/Astro-Client/Launcher-Public#readme",
   "devDependencies": {
     "@types/async": "^3.2.12",
     "@types/discord-rich-presence": "^0.0.0",
