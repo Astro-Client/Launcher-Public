@@ -46,6 +46,7 @@ var config_1 = require("./config");
 var logger_1 = require("./sources/logger");
 var Launcher_1 = require("./Launcher");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var electron_updater_1 = require("electron-updater");
 //! /////////////////////////////////////
 //!  => Export & Variable Declaration ///
 //! /////////////////////////////////////
@@ -67,18 +68,18 @@ var preLaunchOpperation = function (window, callback) { return __awaiter(void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                PreLaunchProgress = logger.log("[MainProccess] PreLaunch Opperations started, step (1/4)", logger.log_options().loading);
+                PreLaunchProgress = logger.log("[MainProccess] PreLaunch Opperations started, step (1/5)", logger.log_options().loading);
                 return [4 /*yield*/, (0, utils_1.sleep)(2000)];
             case 1:
                 _a.sent(); // Waiting page ok
                 AstroClientLauncher.Sources.CheckServersStatus.check().then(function (response) { return __awaiter(void 0, void 0, void 0, function () {
-                    var remoteConfig, RemoteConfigObject, err;
+                    var remoteConfig, RemoteConfigObject, UpdateProccessComplete_1, AutoUpdateProccess_1, err;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 if (response.status != "OK")
                                     return [2 /*return*/, AstroClientLauncher.Sources.WindowsInitializer.ReportToWindowAnError(window, response, PreLaunchProgress)];
-                                PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (2/4)", logger.log_options().loading);
+                                PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (2/5)", logger.log_options().loading);
                                 return [4 /*yield*/, AstroClientLauncher.Protocols.BrainFuck.loadCertifiedRemoteData(config_1.config.remote_config_url)];
                             case 1:
                                 remoteConfig = _a.sent();
@@ -86,35 +87,69 @@ var preLaunchOpperation = function (window, callback) { return __awaiter(void 0,
                                     logger.log(" • [BrainFuck] Remote Config Aquire!", logger.log_options().info);
                                     RemoteConfigObject = JSON.parse(remoteConfig.data);
                                     AstroClientLauncher.setRemoteConfig(RemoteConfigObject);
-                                    PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (3/4)", logger.log_options().loading);
-                                    AstroClientLauncher.Sources.AutoAuth.LoginUser(function (token) { return __awaiter(void 0, void 0, void 0, function () {
-                                        var GettingUserInfosStatus, JWT_Data, PlayerInfoResponse;
+                                    UpdateProccessComplete_1 = function () { return __awaiter(void 0, void 0, void 0, function () {
                                         return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0:
-                                                    AstroClientLauncher.setToken(token);
-                                                    PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (4/4)", logger.log_options().loading);
-                                                    GettingUserInfosStatus = logger.log(" • [UtilsAPI] Getting Player's Infos...", logger.log_options().loading);
-                                                    logger.log("  ->  " + jsonwebtoken_1["default"].decode(token), logger.log_options().warn);
-                                                    JWT_Data = jsonwebtoken_1["default"].decode(token);
-                                                    return [4 /*yield*/, AstroClientLauncher.Sources.UtilsAPI.GetPlayerInfos(JWT_Data._id)];
-                                                case 1:
-                                                    PlayerInfoResponse = _a.sent();
-                                                    if (PlayerInfoResponse.PlayerInfos && !PlayerInfoResponse.err) {
-                                                        PreLaunchProgress("[MainProccess] PreLaunch Opperations Finished Successfuly !", logger.log_options().info);
-                                                        GettingUserInfosStatus(" • [UtilsAPI] User identified successfuly as '" + PlayerInfoResponse.PlayerInfos.username + "'", logger.log_options().info);
-                                                        AstroClientLauncher.setPlayerInfo(PlayerInfoResponse.PlayerInfos);
-                                                        callback();
+                                            PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (4/5)", logger.log_options().loading);
+                                            AstroClientLauncher.Sources.AutoAuth.LoginUser(function (token) { return __awaiter(void 0, void 0, void 0, function () {
+                                                var GettingUserInfosStatus, JWT_Data, PlayerInfoResponse;
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            AstroClientLauncher.setToken(token);
+                                                            PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (5/5)", logger.log_options().loading);
+                                                            GettingUserInfosStatus = logger.log(" • [UtilsAPI] Getting Player's Infos...", logger.log_options().loading);
+                                                            logger.log("  ->  " + jsonwebtoken_1["default"].decode(token), logger.log_options().warn);
+                                                            JWT_Data = jsonwebtoken_1["default"].decode(token);
+                                                            return [4 /*yield*/, AstroClientLauncher.Sources.UtilsAPI.GetPlayerInfos(JWT_Data._id)];
+                                                        case 1:
+                                                            PlayerInfoResponse = _a.sent();
+                                                            if (PlayerInfoResponse.PlayerInfos && !PlayerInfoResponse.err) {
+                                                                PreLaunchProgress("[MainProccess] PreLaunch Opperations Finished Successfuly !", logger.log_options().info);
+                                                                GettingUserInfosStatus(" • [UtilsAPI] User identified successfuly as '" + PlayerInfoResponse.PlayerInfos.username + "'", logger.log_options().info);
+                                                                AstroClientLauncher.setPlayerInfo(PlayerInfoResponse.PlayerInfos);
+                                                                callback();
+                                                            }
+                                                            else {
+                                                                PreLaunchProgress("[MainProccess] PreLaunch Opperations failed, sub-process failed, step (4/4)", logger.log_options().critical);
+                                                                GettingUserInfosStatus(" • [UtilsAPI] Cannot get player infos, error: " + PlayerInfoResponse.err, logger.log_options().critical);
+                                                                (0, utils_1.end_all_process)();
+                                                            }
+                                                            return [2 /*return*/];
                                                     }
-                                                    else {
-                                                        PreLaunchProgress("[MainProccess] PreLaunch Opperations failed, sub-process failed, step (4/4)", logger.log_options().critical);
-                                                        GettingUserInfosStatus(" • [UtilsAPI] Cannot get player infos, error: " + PlayerInfoResponse.err, logger.log_options().critical);
-                                                        (0, utils_1.end_all_process)();
-                                                    }
-                                                    return [2 /*return*/];
-                                            }
+                                                });
+                                            }); });
+                                            return [2 /*return*/];
                                         });
-                                    }); });
+                                    }); };
+                                    PreLaunchProgress("[MainProccess] PreLaunch Opperations started, step (4/5)", logger.log_options().loading);
+                                    AutoUpdateProccess_1 = logger.log(" • [AutoUpdate] Initialise AutoUpdate Module...", logger.log_options().loading);
+                                    electron_updater_1.autoUpdater.checkForUpdates();
+                                    electron_updater_1.autoUpdater.on('checking-for-update', function () {
+                                        AutoUpdateProccess_1(" • [AutoUpdate] Checking for updated...", logger.log_options().loading);
+                                    });
+                                    electron_updater_1.autoUpdater.on('update-available', function (info) {
+                                        AutoUpdateProccess_1(" • [AutoUpdate] Updated Available, downloading: 0% | 0/s", logger.log_options().loading);
+                                    });
+                                    electron_updater_1.autoUpdater.on('error', function (err) {
+                                        var _a, _b;
+                                        if (!((_a = AstroClientLauncher.Windows) === null || _a === void 0 ? void 0 : _a.splashScreenLoading))
+                                            return;
+                                        if (err.toString().indexOf("dev-app-update.yml") >= 0)
+                                            return UpdateProccessComplete_1();
+                                        AstroClientLauncher.Sources.WindowsInitializer.ReportToWindowAnError((_b = AstroClientLauncher.Windows) === null || _b === void 0 ? void 0 : _b.splashScreenLoading, { status: "ERR-FATAL", err: undefined }, AutoUpdateProccess_1);
+                                        AutoUpdateProccess_1(" • [AutoUpdate] Cannot download update! Error: " + err.toString(), logger.log_options().critical);
+                                    });
+                                    electron_updater_1.autoUpdater.on('download-progress', function (progressObj) {
+                                        AutoUpdateProccess_1(" \u2022 [AutoUpdate] Updated Available, downloading: ".concat(progressObj.percent, "% | ").concat(progressObj.transferred, "/").concat(progressObj.total, " | ").concat(progressObj.bytesPerSecond), logger.log_options().loading);
+                                    });
+                                    electron_updater_1.autoUpdater.on('update-downloaded', function (info) {
+                                        AutoUpdateProccess_1(" \u2022 [AutoUpdate] Updated download! restarting, please wait.", logger.log_options().info);
+                                        electron_updater_1.autoUpdater.quitAndInstall();
+                                    });
+                                    electron_updater_1.autoUpdater.on('update-not-available', function (info) {
+                                        AutoUpdateProccess_1(" \u2022 [AutoUpdate] No Updated Available, continue.", logger.log_options().info);
+                                        UpdateProccessComplete_1();
+                                    });
                                 }
                                 else {
                                     err = remoteConfig.err;

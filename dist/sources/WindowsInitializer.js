@@ -100,7 +100,7 @@ var InitLoginWindow = function () {
     return loginWindow;
 };
 var ReportToWindowAnError = function (window, response, draftLog) {
-    draftLog("[MainProccess] PreLaunch Opperations failed, sub-process failed, step (1/3)", logger.log_options().critical);
+    draftLog("[MainProccess] PreLaunch Opperations failed, sub-process failed, step (1/5)", logger.log_options().critical);
     if (response.status == "ERR-CONNECTION")
         return window.webContents.send("ERROR", { type: response.status });
     if (response.status == "ERR-UPKEEP")
