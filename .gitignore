@@ -93,3 +93,4 @@ out/
 minecraft/
 creditlogin
 build/
+electron-builder.yml
