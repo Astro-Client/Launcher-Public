@@ -1,0 +1,31 @@
+body {
+    background: #2f2f2f;
+}
+
+@font-face {
+    font-family: 'BebasNeue-Regular'; /*a name to be used later*/
+    src: url(../font/BebasNeue-Regular.ttf) format('truetype');; /*URL to font*/
+  }
+
+.loader {
+    top: 40%;
+    justify-content: center;
+}
+
+.lodingTitle {
+    padding-top: 95%;
+    font-family: 'BebasNeue-Regular'; /*a name to be used later*/
+
+    
+    color: aliceblue;
+    background-color: #2f2f2f;
+    justify-content: center;
+    margin: 0 auto;
+    
+    text-align: center;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+

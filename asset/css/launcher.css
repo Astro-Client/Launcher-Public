@@ -1,0 +1,126 @@
+body {
+    zoom: 50%;
+}
+
+.content-grid {
+    margin-top: -120px;
+}
+
+#navigation-widget-small {
+    margin-top: 0px;
+}
+
+.full-start {
+  background: linear-gradient(to bottom, transparent, #1d2333 100%),
+  url("https://cdn.discordapp.com/attachments/725297550973862031/877867443559747627/2021-08-19_12.47.45.png") no-repeat scroll center center / cover !important;
+}
+
+.hide-content {
+  display: none;
+}
+
+.container-loading {
+  margin-top: 50px;
+  position: relative;
+  width: 40%;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #1d2333;
+  box-shadow: 0 0 40px 0 rgba(0,0,0,.06);
+}
+
+.Loading {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 10px;
+  background: #f1f1f1;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.Loading:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+  animation: loading-animation 5s infinite;
+}
+
+@keyframes loading-animation {
+  0% {
+    width: 0;
+    background: #a28089;
+  }
+  
+  25% {
+    width: 40%;
+    background: #a0d2eb;
+  }
+  
+  50% {
+    width: 60%;
+    background: #ffa8b6;
+  }
+  
+  75% {
+    width: 75%;
+    background: #d0bdf4;
+  }
+  
+  100% {
+    width: 100%;
+    background: #494d5f;
+  }
+}
+
+.bb::before, .bb::after {
+    content: "";
+    z-index: -1;
+    margin: -5%;
+    box-shadow: inset 0 0 0 2px;
+    animation: clipMe 8s linear infinite;
+  }
+  .bb::before {
+    animation-delay: -4s;
+  }
+  .bb:hover::after, .bb:hover::before {
+    background-color: rgba(255, 0, 0, 0.3);
+  }
+  
+  @keyframes clipMe {
+    0%, 100% {
+      clip: rect(0px, 220px, 2px, 0px);
+    }
+    25% {
+      clip: rect(0px, 2px, 220px, 0px);
+    }
+    50% {
+      clip: rect(218px, 220px, 220px, 0px);
+    }
+    75% {
+      clip: rect(0px, 220px, 220px, 218px);
+    }
+  }
+
+  .backgroundStartingClass {
+    animation: 1s infinite alternate backgroundStarting;
+  }
+
+  .backgroundStartedClass {
+    fill: red;
+  }
+
+  @keyframes backgroundStarting {
+    from {
+        fill:#fff
+    }
+    50% {
+        fill:#00ff15
+    }
+  }

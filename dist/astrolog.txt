@@ -1,0 +1,13 @@
+[MainProccess] Initialising Main engine & sub-proccess...
+ • Creating Launcher Object
+ • Initialising all Launcher Sources
+ • Initialising all Launcher's Protocols
+[WindowsInitializer] Splash Screen successfuly init
+[DiscordRPC] cannot start Discord RPC: Error: Could not connect
+[MainProccess] PreLaunch Opperations started, step (1/4)
+ • [ServerStatus] Requesting Astro Client Server... Checking information
+ • [BrainFuck] Remote Config Aquire!
+ • [AutoAuth] Starting AutoLoger Proccess, step 0/2
+  -> [AuthFile] Checking Auth File for eventualy stored token...
+  -> [ManualLogin] Login Window Sucessfuly Init!
+  -> [ManualLogin] Waiting for classic User Auth Token throw Login Window...

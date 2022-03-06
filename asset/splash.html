@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- bootstrap 4.3.1 -->
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <!-- styles -->
+  <link rel="stylesheet" href="css/styles.min.css">
+  <!-- simplebar styles -->
+  <link rel="stylesheet" href="css/vendor/simplebar.css">
+  <!-- favicon -->
+  <link rel="icon" href="img/astroclient-logo.ico">
+  <title>Astro Client | Account Hub</title>
+  <style>
+      .noselect {
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none; 
+        -khtml-user-select: none; 
+        -moz-user-select: none;
+        -ms-user-select: none; 
+        user-select: none;                   
+        }
+
+      .page-loader-indicator img {
+        -webkit-animation: focus_changer 1.5s alternate infinite;
+        animation: focus_changer 1.5s alternate infinite;
+      }
+
+      
+      .icon-logo {
+        width: 125px;
+         height: 125px; 
+         margin-top:0px !important;
+      }
+
+      .client-logo {
+        margin-top: 150px;
+      }
+
+  </style>
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div class="page-loader" style="height: 100%; opacity:1;visibility:visible">
+    <!-- PAGE LOADER DECORATION -->
+    <div class="page-loader-decoration client-logo" style="background-color: rgba(0,0,0,0); width: auto; height: auto;">
+      <!-- ICON LOGO ASTRO -->
+      <div class="icon-logo">
+        <img src="./img/MOSHED-LOGO.gif" alt="Astro Client Logo" style="width: 100%;">
+      </div>
+      <!-- /ICON LOGO ASTRO -->
+    </div> 
+    <!-- /PAGE LOADER DECORATION -->
+
+    <!-- PAGE LOADER INFO -->
+    <div class="page-loader-info showanimation">
+      <!-- PAGE LOADER INFO TITLE -->
+      <p class="page-loader-info-title noselect" style="margin-top: 0px;">Astro Client</p>
+      <!-- /PAGE LOADER INFO TITLE -->
+
+      <!-- PAGE LOADER INFO TEXT -->
+      <p id="page-loader-info-text" class="page-loader-info-text noselect" style="font-family: Rajdhani,sans-serif;">Downloading Asset...</p>
+      <!-- /PAGE LOADER INFO TEXT -->
+    </div>
+    <!-- /PAGE LOADER INFO -->
+    
+    <!-- PAGE LOADER INDICATOR -->
+    <div id="page-loader-indicator-container" class="page-loader-indicator loader-bars showanimation">
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+        <div class="loader-bar"></div>
+    </div>
+    
+    <div style="
+    top: 95%;
+    position: absolute;
+    left: 2%;"><p id="updater-version-text">Undefined</p></div>
+
+    <div class="page-loader-indicator loader-bars" id="error-connection" style="display: none; margin-top: 40px; margin-bottom: 20px;"><img src="img/svg/error-connection.svg" style="width: 80px; height: 80px;"></div>
+    <div class="page-loader-indicator loader-bars" id="error-upkeep" style="display: none; margin-top: 40px; margin-bottom: 20px;"><img src="img/svg/maintenance.svg" style="width: 80px; height: 80px;"></div>
+    <div class="page-loader-indicator loader-bars" id="error-outdated" style="display: none; margin-top: 40px; margin-bottom: 20px;"><img src="img/svg/outdated.svg" style="width: 80px; height: 80px;"></div>
+    <div class="page-loader-indicator loader-bars" id="error-fatal" style="display: none; margin-top: 40px; margin-bottom: 20px;"><img src="img/svg/fatal-error.svg" style="width: 80px; height: 80px;"></div>
+    <!-- /PAGE LOADER INDICATOR -->
+  </div>
+  <!-- /PAGE LOADER -->
+
+<!-- app -->
+<script src="js/utils/app.js"></script>
+<!-- page loader -->
+<script src="js/utils/page-loader.js"></script>
+<!-- header -->
+<script src="js/header/header.js"></script>
+<!-- sidebar -->
+<script src="js/sidebar/sidebar.js"></script>
+<!-- content -->
+<script src="js/content/content.js"></script>
+<!-- form.utils -->
+<script src="js/form/form.utils.js"></script>
+<!-- SVG icons -->
+<script src="js/utils/svg-loader.js"></script>
+<!-- Jquery -->
+<script>window.$ = window.jQuery = require('jquery');</script>
+
+<script>
+  const electron = require('electron');
+  const remote = require('electron').remote;
+  const {ipcRenderer} = electron;
+
+
+    function ERRCONNECTION() {
+      $("#page-loader-info-text").text("Cannot connect to the internet ミ●﹏☉ミ");
+      $("#error-connection").show();
+      $("#page-loader-indicator-container").hide();
+    }
+
+    function ERRUPKEEP() {
+      $("#page-loader-info-text").text("we're currently upkeeping servers  ~ (^-^)~ ");
+
+      setInterval(function() {
+        $("#page-loader-info-text").text("we're currently upkeeping servers  ~(^-^) ~ ");
+        setTimeout(function() {
+          $("#page-loader-info-text").text("we're currently upkeeping servers  ~ (^-^)~ ");
+        }, 500)
+      }, 1000)
+
+      $("#error-upkeep").show();
+      $("#page-loader-indicator-container").hide();
+    }
+
+    function ERROUTDATED() {
+      $("#page-loader-info-text").text("Please update the client at astroclient.me");
+      $("#error-outdated").show();
+      $("#page-loader-indicator-container").hide();
+    }
+
+    function ERRFATAL() {
+      $("#page-loader-info-text").text("An unknown error occurred, restart the client");
+      $("#error-fatal").show();
+      $("#page-loader-indicator-container").hide();
+    }
+
+    ipcRenderer.on('ERROR', (event, err) => {
+      console.log(err);
+      if(err.type == "ERR-CONNECTION") return ERRCONNECTION()
+      if(err.type == "ERR-UPKEEP") return ERRUPKEEP()
+      if(err.type == "ERR-OUTDATED") return ERROUTDATED()
+      if(err.type == "ERR-FATAL") return ERRFATAL()
+    });
+    
+    ipcRenderer.on('updater_version', (event, version) => {
+      $("#updater-version-text").text(version.id)
+    });
+    
+    $(".showanimation").fadeTo(0, 0);
+    $(".client-logo").fadeTo(0, 0);
+    $(document).ready(function(){
+
+      $(".client-logo").css({"margin-top": "-10px"});
+      $(".icon-logo").css({"width": "1500px", "height": "1500px"});
+
+      
+
+      $(".client-logo").fadeTo(2000, 1);
+      $(".icon-logo").animate({"width": "125px", "height": "125px"}, "slow");
+
+
+      setTimeout(function(){
+        $(".showanimation").fadeTo(1000, 1);
+      }, 1500)
+    });
+
+</script>
+
+</body>
+</html>
